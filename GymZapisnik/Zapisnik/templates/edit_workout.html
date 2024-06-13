@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Workout</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home' %}">My Fitness App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_name' %}">Change Name</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_password' %}">Change Password</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'workoutAll' %}">Workouts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Edit Workout</h2>
+    <form method="post" action="{% url 'edit_workout' workout.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="workoutName">Workout Name:</label>
+            <input type="text" class="form-control" id="workoutName" name="name" value="{{ workout.name }}">
+        </div>
+        <div class="form-group">
+            <label for="workoutDate">Workout Date:</label>
+            <input type="date" class="form-control" id="workoutDate" name="date" value="{{ workout.date|date:'Y-m-d' }}">
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+            <a href="{% url 'workout_detail' workout.id %}" class="btn btn-secondary">Back</a>
+        </div>
+    </form>
+</div>
+
+</div>
+<!-- Bootstrap JS a jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

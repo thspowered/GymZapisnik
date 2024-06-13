@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vytvořit nový cvik</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2>Vytvořit nový cvik</h2>
+        <form id="vytvoritCvikForm" method="post" action="{% url 'create_exercise' workout.id %}">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="nazevCviku">Název cviku:</label>
+            <input type="text" class="form-control" id="nazevCviku" name="nazevCviku" required>
+          </div>
+          <div class="form-group">
+            <label for="popisCviku">Popis cviku:</label>
+            <textarea class="form-control" id="popisCviku" name="popisCviku" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+                        <label for="kategorieCviku">Kategorie cviku:</label>
+                        <select class="form-control" id="kategorieCviku" name="kategorieCviku" required>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+          </div>
+          <button type="submit" class="btn btn-success">Vytvořit cvik</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

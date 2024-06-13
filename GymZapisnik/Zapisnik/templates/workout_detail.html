@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Detail</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home' %}">My Fitness App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_name' %}">Change Name</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_password' %}">Change Password</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'workoutAll' %}">Workouts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row mt-5">
+      <div class="col-md-8">
+        <h2>{{ workout.name }}</h2>
+        <p><strong>Date:</strong> {{ workout.date }}</p>
+        <h3>Exercises</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Sets</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for exercise in workout.exercises.all %}
+              <tr>
+                <td>{{ exercise.name }}</td>
+                <td>{{ exercise.description }}</td>
+                <td>
+                  <ul>
+                    {% for set in exercise.sets.all %}
+                      {% if set.workout_id == workout.id %}
+                        <li>{{ set.repetitions }} reps, {{ set.weight }} kg</li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </td>
+                <td>
+
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSetModal{{ exercise.id }}">
+                    Add Set
+                  </button>
+
+
+                  <div class="modal fade" id="addSetModal{{ exercise.id }}" tabindex="-1" role="dialog" aria-labelledby="addSetModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="addSetModalLabel">Add Set</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="post" action="{% url 'add_set_to_exercise' workout.id exercise.id %}">
+                              {% csrf_token %}
+                              <div class="form-group">
+                                  <label for="repetitions">Repetitions</label>
+                                  <input type="number" class="form-control" id="repetitions" name="repetitions" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="weight">Weight (kg)</label>
+                                  <input type="number" class="form-control" id="weight" name="weight" required>
+                              </div>
+
+                              <button type="submit" class="btn btn-primary">Save Set</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <form method="post" action="{% url 'delete_exercise_from_workout' workout.id exercise.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger mr-2 " style="margin-top: 5px;" >Delete Exercise</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a href="{% url 'exercise_list' workout.id %}" class="btn btn-primary">Add Exercise</a>
+
+        <a href="{% url 'edit_workout' workout_id=workout.id %}" class="btn btn-secondary">Edit Workout</a>
+        <form method="post" action="{% url 'delete_workout' workout_id=workout.id %}" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete Workout</button>
+        </form>
+        <a href="{% url 'workoutAll' %}" class="btn btn-secondary btn-block mt-3" style="width: 100px;">Back</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

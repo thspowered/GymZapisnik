@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .welcome-container {
+      margin-top: 100px;
+    }
+    .welcome-message {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">My Fitness App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_name' %}">Change Name</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'change_password' %}">Change Password</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'workoutAll' %}">Workouts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row justify-content-center welcome-container">
+      <div class="col-md-6">
+        <div class="card text-center">
+          <div class="card-body">
+            <h2 class="card-title">Welcome to My Fitness App</h2>
+            <p class="card-text welcome-message">
+              {% if user.is_authenticated %}
+                Hello, {{ user.username }}! You are logged in to our workout tracking system.
+              {% else %}
+                Welcome to our workout tracking system.
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
